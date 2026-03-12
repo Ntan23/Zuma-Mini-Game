@@ -1,5 +1,3 @@
-using System.Collections;
-using NUnit.Framework.Constraints;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -119,6 +117,13 @@ public class Ball : MonoBehaviour
         ballManager.InsertBall(this, hitBall);
 
         currentState = BallState.OnPath;
+    }
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.CompareTag("Wall") && currentState == BallState.Projectile)
+        {
+            ballPoolManager.ReturnBall(this);
+        }
     }
 
     public void EnableTrailRenderer()

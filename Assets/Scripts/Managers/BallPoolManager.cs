@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -43,6 +42,7 @@ public class BallPoolManager : MonoBehaviour
     public void OnReturnBall(Ball ball)
     {
         ball.gameObject.SetActive(false);
+        ball.transform.SetParent(parent);
     }
 
     public void OnDestroyBall(Ball ball)

@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class BallManager : MonoBehaviour
@@ -94,14 +93,13 @@ public class BallManager : MonoBehaviour
         Vector3 dir;
 
         if (hitIndex < activeBalls.Count - 1)
-        {
-            // If there is a ball in front of current ball
-            Ball frontBall = activeBalls[hitIndex + 1];
-            dir = (hitBall.transform.position - frontBall.transform.position).normalized;
+        { 
+            Ball nextBall = activeBalls[hitIndex + 1];
+            dir = (hitBall.transform.position - nextBall.transform.position).normalized;
         }
         else
         {
-            // Hit the first ball
+            //If hit last balls
             Transform[] waypoints = GetWaypoints();
             dir = (waypoints[waypointIndex].position - hitBall.transform.position).normalized;
         }

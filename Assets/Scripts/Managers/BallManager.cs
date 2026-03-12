@@ -54,7 +54,7 @@ public class BallManager : MonoBehaviour
 
     void Update()
     {
-        if(!gameManager.isComplete) 
+        if(!gameManager.isComplete && !gameManager.isPaused) 
         {
             MoveBalls();
         }

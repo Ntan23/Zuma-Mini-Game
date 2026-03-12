@@ -62,7 +62,7 @@ public class Ball : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(currentState == BallState.Projectile && !gameManager.isComplete)
+        if(currentState == BallState.Projectile && !gameManager.isComplete && !gameManager.isPaused)
         {
             CheckHitBall();
         }

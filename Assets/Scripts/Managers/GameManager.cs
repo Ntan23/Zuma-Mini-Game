@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -18,13 +19,33 @@ public class GameManager : MonoBehaviour
 
     public LevelData levelData;
     [SerializeField] private WinLoseUI winLoseUI;
+    [SerializeField] private PauseMenuUI pauseMenuUI;
     [SerializeField] private ParticleSystem winLoseParticleEffect;
     [HideInInspector] public bool isComplete;
+    [HideInInspector] public bool isPaused;
+    private bool canPauseResume;
     AudioManager audioManager;
 
     void Start()
     {
         audioManager = AudioManager.instance;
+
+        canPauseResume = true;
+    }
+
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape) && canPauseResume)
+        {
+            if(!isPaused)
+            {
+                PauseGame();
+            }
+            else if (isPaused)
+            {
+                ResumeGame();
+            }
+        }
     }
 
     public void GameOver()
@@ -43,7 +64,7 @@ public class GameManager : MonoBehaviour
     public void Victory()
     {
         audioManager.PlaySFX("Victory");
-        
+
         var main = winLoseParticleEffect.main;
         main.startColor = Color.yellow;
 
@@ -51,6 +72,16 @@ public class GameManager : MonoBehaviour
 
         isComplete = true;
         winLoseUI.ShowUI(true);
+    }
+
+    public void PauseGame()
+    {
+        StartCoroutine(Pause());
+    }
+
+    public void ResumeGame()
+    {
+        StartCoroutine(Resume());
     }
 
     public void RestartGame()
@@ -63,5 +94,25 @@ public class GameManager : MonoBehaviour
         winLoseUI.CloseUI();
         yield return new WaitForSeconds(0.5f);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    IEnumerator Pause()
+    {
+        canPauseResume = false;
+        pauseMenuUI.ShowUI();
+        yield return new WaitForSeconds(0.5f);
+        isPaused = true;
+        canPauseResume = true;
+        Time.timeScale = 0;
+    }
+
+    IEnumerator Resume()
+    {
+        canPauseResume = false;
+        Time.timeScale = 1;
+        pauseMenuUI.CloseUI();
+        yield return new WaitForSeconds(0.5f);
+        isPaused = false;
+        canPauseResume = true;
     }
 }
